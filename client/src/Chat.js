@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState , useEffect} from "react"
 function Chat({socket , username, room}){
     const[currentMessage,setCurrentMessage]= useState("");
     const sendMessage = async () =>{
@@ -12,6 +12,18 @@ function Chat({socket , username, room}){
             await socket.emit("send_message" , messageData);
         }
     }
+  useEffect(() => {
+    const receiveMessage = (data) => {
+      console.log(data);
+    };
+
+    socket.on("receive_message", receiveMessage);
+
+    return () => {
+      socket.off("receive_message", receiveMessage);
+    };
+  }, [socket]);
+  
     return (
         <div>
             <div className="chat-header">
