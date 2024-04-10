@@ -19,6 +19,9 @@ io.on("connection", (socket) => {
   socket.on("join-room" , (data) =>{
     socket.join(data);
     console.log(`user ${socket.id} joined  room ${data}`);
+  });
+  socket.on("send_message" , (data)=>{
+    console.log(data);
   })
   socket.on("disconnect", () => {
     console.log(`user ${socket.id} Disconnected`);
