@@ -14,15 +14,31 @@ function App() {
   }
   return (
     <div className="App">
-
-    <h3>let's Chat</h3>
-    <label> Name: </label>
-    <input type="text" placeholder='type your name' onChange={(event)=>{setUsername(event.target.value)}}/>
-    <label>Chat Room Id:</label>
-    <input type="text" placeholder='type the chat room id' onChange={(event) => {setRoom(event.target.value)}} />
-    <button onClick={joinRoom}>Join The Room</button>
-    <Chat socket={socket} username={username} room={room}/>
-
+      <h3>let's Chat</h3>
+      <div className="input-group">
+        <div className="input-container">
+          <label> Name: </label>
+          <input
+            type="text"
+            placeholder="type your name"
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+          />
+        </div>
+        <div className="input-container">
+          <label>Chat Room Id:</label>
+          <input
+            type="text"
+            placeholder="type the chat room id"
+            onChange={(event) => {
+              setRoom(event.target.value);
+            }}
+          />
+        </div>
+      </div>
+      <button onClick={joinRoom}>Join The Room</button>
+      <Chat socket={socket} username={username} room={room} />
     </div>
   );
 }
