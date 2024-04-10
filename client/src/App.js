@@ -18,9 +18,13 @@ function App() {
   }
   return (
     <div className="App">
+
       {!joined && (
         <>
-          <h3>let's Chat</h3>
+      <h3>let's Chat</h3>
+      <div className="input-group">
+        <div className="input-container">
+
           <label> Name: </label>
           <input
             type="text"
@@ -29,6 +33,9 @@ function App() {
               setUsername(event.target.value);
             }}
           />
+        </div>
+        <div className="input-container">
+
           <label>Chat Room Id:</label>
           <input
             type="text"
@@ -37,10 +44,17 @@ function App() {
               setRoom(event.target.value);
             }}
           />
+
           <button onClick={joinRoom}>Join The Room</button>
         </>
       )}
         {joined && <Chat socket={socket} username={username} room={room} />}
+
+        </div>
+      </div>
+      <button onClick={joinRoom}>Join The Room</button>
+      <Chat socket={socket} username={username} room={room} />
+
     </div>
   );
 }
