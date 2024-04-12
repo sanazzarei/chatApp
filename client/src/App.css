@@ -60,7 +60,9 @@ button:hover {
 
 .chat-body {
   height: 300px;
-  overflow-y: auto;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding: 10px;
 }
 
