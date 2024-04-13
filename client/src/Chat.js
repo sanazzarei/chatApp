@@ -1,8 +1,13 @@
 import {useState , useEffect} from "react"
-import ScrollToBottom from "react-scroll-to-bottom";
+import ScrollToBottom from "react-scroll-to-bottom"
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+
 function Chat({socket , username, room}){
     const[currentMessage,setCurrentMessage]= useState("");
     const [messageList, setMessageList]= useState([]);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
     const sendMessage = async () =>{
         if(currentMessage.trim() !== ""){
           const messageData = {
@@ -30,6 +35,11 @@ function Chat({socket , username, room}){
       socket.off("receive_message", receiveMessage);
     };
   }, [socket]);
+
+   const toggleEmojiPicker = () => {
+     setShowEmojiPicker(!showEmojiPicker);
+   };
+
 
     return (
       <div className="chat-container">
@@ -66,7 +76,18 @@ function Chat({socket , username, room}){
               event.key === "Enter" && sendMessage();
             }}
           />
-          <button onClick={sendMessage}>&#9658;</button>
+          <button id="emoji-btn" onClick={toggleEmojiPicker}>&#x1F642;</button>{" "}
+          {showEmojiPicker && (
+            <Picker
+              data={data}
+              onEmojiSelect={(emoji) =>
+                setCurrentMessage(currentMessage + emoji.native)
+              }
+              set="apple"
+              showPreview={false}
+            />
+          )}
+          <button onClick={sendMessage}>send</button>
         </div>
       </div>
     );

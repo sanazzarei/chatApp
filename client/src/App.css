@@ -152,4 +152,9 @@ button:hover {
   padding-left: 10px;
      font-size: 16px; 
 
+     
+}
+#emoji-btn{
+  background-color: #fff;
+  font-size: 20px;
 }
