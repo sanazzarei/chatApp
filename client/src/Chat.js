@@ -94,7 +94,7 @@ function Chat({ socket, username, room }) {
           &#x1F642;
         </button>{" "}
         {showEmojiPicker && (
-          <div ref={emojiPickerRef}>
+          <div ref={emojiPickerRef} className="emoji-container">
             <Picker
               data={data}
               onEmojiSelect={(emoji) =>

@@ -91,6 +91,7 @@ button:hover {
   padding: 10px;
   background-color: #f4f4f4;
   width: 98%;
+  position: relative;
 
 }
 
@@ -158,3 +159,13 @@ button:hover {
   background-color: #fff;
   font-size: 20px;
 }
+            
+
+.emoji-container{
+  position: absolute;
+    bottom: 100%; 
+  right: 0;
+  z-index: 999;
+  overflow-x: hidden;
+}
+
