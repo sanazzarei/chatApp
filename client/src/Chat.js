@@ -122,10 +122,19 @@ const receiveMessage = (data) => {
               key={messageContent.time}
             >
               <div className="message-sender">{messageContent.author}</div>
-              <div className="message-content">{messageContent.message}</div>
-              <div className="message-time">{messageContent.time}</div>
-              {messageContent.fileData && (
-                <div className="message-file">
+              <div className="message-content">
+                {messageContent.fileName.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                  <img
+                    src={messageContent.fileData}
+                    alt={messageContent.fileName}
+                    style={{
+                      maxWidth: "200px",
+                      maxHeight: "200px",
+                      width: messageContent.imageWidth,
+                      height: messageContent.imageHeight,
+                    }}
+                  />
+                ) : (
                   <a
                     href={messageContent.fileData}
                     target="_blank"
@@ -133,8 +142,9 @@ const receiveMessage = (data) => {
                   >
                     {messageContent.fileName}
                   </a>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="message-time">{messageContent.time}</div>
             </div>
           ))}
         </ScrollToBottom>
