@@ -7,6 +7,7 @@ function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const emojiButtonRef = useRef(null);
   const emojiPickerRef = useRef(null); // Define emojiPickerRef here
 
@@ -16,6 +17,7 @@ function Chat({ socket, username, room }) {
         room: room,
         author: username,
         message: currentMessage,
+        file: selectedFile,
         time:
           new Date(Date.now()).getHours() +
           ":" +
@@ -24,13 +26,29 @@ function Chat({ socket, username, room }) {
       await socket.emit("send_message", messageData);
       setMessageList((list) => [...list, messageData]);
       setCurrentMessage(""); // Clear the input field
+      setSelectedFile(null); // Reset selected file after sending
     }
   };
 
   useEffect(() => {
-    const receiveMessage = (data) => {
-      setMessageList((list) => [...list, data]);
-    };
+const receiveMessage = (data) => {
+  if (data.message) {
+    // If the received data is a message
+    setMessageList((list) => [...list, data]);
+  } else if (data.fileData) {
+    // If the received data is a file
+    setMessageList((list) => [
+      ...list,
+      {
+        fileData: data.fileData,
+        author: data.author,
+        time: data.time,
+        fileName: data.fileName,
+      },
+    ]);
+  }
+};
+
 
     socket.on("receive_message", receiveMessage);
 
@@ -62,6 +80,34 @@ function Chat({ socket, username, room }) {
     };
   }, []);
 
+  // Function to handle file upload
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleFileUpload = async () => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const fileData = event.target.result; // File data as a Base64 string
+        await socket.emit("send_file", {
+          fileData,
+          fileName: selectedFile.name,
+        });
+        // Add the uploaded file as a message to the UI
+        const messageData = {
+          author: username,
+          fileData,
+          fileName: selectedFile.name,
+          time: new Date().toLocaleTimeString(),
+        };
+        setMessageList((list) => [...list, messageData]);
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+
   return (
     <div className="chat-container">
       <div className="chat-header">
@@ -78,6 +124,17 @@ function Chat({ socket, username, room }) {
               <div className="message-sender">{messageContent.author}</div>
               <div className="message-content">{messageContent.message}</div>
               <div className="message-time">{messageContent.time}</div>
+              {messageContent.fileData && (
+                <div className="message-file">
+                  <a
+                    href={messageContent.fileData}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {messageContent.fileName}
+                  </a>
+                </div>
+              )}
             </div>
           ))}
         </ScrollToBottom>
@@ -93,6 +150,8 @@ function Chat({ socket, username, room }) {
         <button id="emoji-btn" onClick={toggleEmojiPicker} ref={emojiButtonRef}>
           &#x1F642;
         </button>{" "}
+        <input type="file" onChange={handleFileChange} />
+        <button onClick={handleFileUpload}>Upload</button>
         {showEmojiPicker && (
           <div ref={emojiPickerRef} className="emoji-container">
             <Picker
