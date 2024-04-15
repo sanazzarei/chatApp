@@ -2,9 +2,22 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const cors = require("cors");
+const multer = require("multer");
 const { Server } = require("socket.io");
 
 app.use(cors());
+// Define storage for uploaded files
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // Upload files to the "uploads" directory
+  },
+  filename: function (req, file, cb) {
+    // Generate unique filename
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,8 +34,13 @@ io.on("connection", (socket) => {
     console.log(`user ${socket.id} joined  room ${data}`);
   });
   
+  
   socket.on("send_message" , (data)=>{
-socket.to(data.room).emit("receive_message" , data)  })
+socket.to(data.room).emit("receive_message" , data)  });
+
+ socket.on("send_file", (fileData) => {
+   console.log("Received file:", fileData);
+ });
 
   socket.on("disconnect", () => {
     console.log(`user ${socket.id} Disconnected`);
