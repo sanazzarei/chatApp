@@ -12,7 +12,11 @@ function Chat({ socket, username, room }) {
   const emojiPickerRef = useRef(null); // Define emojiPickerRef here
 
   const sendMessage = async () => {
-    if (currentMessage.trim() !== "") {
+  if (currentMessage.trim() !== "" || selectedFile !== null) {
+    // If there's a selected file, upload it first
+    if (selectedFile) {
+      await handleFileUpload();
+    }
       const messageData = {
         room: room,
         author: username,
@@ -123,7 +127,8 @@ const receiveMessage = (data) => {
             >
               <div className="message-sender">{messageContent.author}</div>
               <div className="message-content">
-                {messageContent.fileName.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                {messageContent.message && <p>{messageContent.message}</p>}
+                {messageContent.fileName?.match(/\.(jpg|jpeg|png|gif)$/) ? (
                   <img
                     src={messageContent.fileData}
                     alt={messageContent.fileName}
@@ -161,7 +166,6 @@ const receiveMessage = (data) => {
           &#x1F642;
         </button>{" "}
         <input type="file" onChange={handleFileChange} />
-        <button onClick={handleFileUpload}>Upload</button>
         {showEmojiPicker && (
           <div ref={emojiPickerRef} className="emoji-container">
             <Picker

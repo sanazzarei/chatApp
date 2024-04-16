@@ -155,6 +155,10 @@ button:hover {
 
      
 }
+.message-content p{
+  margin: 2px;
+}
+
 #emoji-btn{
   background-color: #fff;
   font-size: 20px;
