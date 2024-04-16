@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import attachmentImage from "./images/attachments.png";
+
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -84,9 +86,20 @@ const receiveMessage = (data) => {
     };
   }, []);
 
-  // Function to handle file upload
+   const handleAttachmentClick = () => {
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.style.display = "none";
+      fileInput.addEventListener("change", handleFileChange);
+      document.body.appendChild(fileInput);
+      fileInput.click();
+   };
+
+//   // Function to handle file upload
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+      handleFileUpload(); 
+      event.target.remove(); 
   };
 
   const handleFileUpload = async () => {
@@ -165,7 +178,12 @@ const receiveMessage = (data) => {
         <button id="emoji-btn" onClick={toggleEmojiPicker} ref={emojiButtonRef}>
           &#x1F642;
         </button>{" "}
-        <input type="file" onChange={handleFileChange} />
+        <img
+          src={attachmentImage}
+          alt="Attachment"
+          id="attachment"
+          onClick={handleAttachmentClick}
+        />
         {showEmojiPicker && (
           <div ref={emojiPickerRef} className="emoji-container">
             <Picker
