@@ -177,4 +177,8 @@ button:hover {
   width: 6%;
   height: 6%;
 }
+.uploaded {
+  background-color: rgb(165, 209, 165);
+  border-radius: 50%;
+}
 

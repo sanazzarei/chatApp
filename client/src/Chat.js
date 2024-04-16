@@ -10,6 +10,7 @@ function Chat({ socket, username, room }) {
   const [messageList, setMessageList] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileUploaded, setFileUploaded] = useState(false);
   const emojiButtonRef = useRef(null);
   const emojiPickerRef = useRef(null); // Define emojiPickerRef here
 
@@ -98,6 +99,7 @@ const receiveMessage = (data) => {
 //   // Function to handle file upload
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+      setFileUploaded(true);
       handleFileUpload(); 
       event.target.remove(); 
   };
@@ -119,6 +121,8 @@ const receiveMessage = (data) => {
           time: new Date().toLocaleTimeString(),
         };
         setMessageList((list) => [...list, messageData]);
+        setSelectedFile(null); 
+        setFileUploaded(false);
       };
       reader.readAsDataURL(selectedFile);
     }
@@ -183,6 +187,7 @@ const receiveMessage = (data) => {
           alt="Attachment"
           id="attachment"
           onClick={handleAttachmentClick}
+          className={fileUploaded ? "uploaded" : ""}
         />
         {showEmojiPicker && (
           <div ref={emojiPickerRef} className="emoji-container">
