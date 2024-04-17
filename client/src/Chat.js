@@ -20,6 +20,7 @@ function Chat({ socket, username, room }) {
     if (selectedFile) {
       await handleFileUpload();
     }
+    else{
       const messageData = {
         room: room,
         author: username,
@@ -35,6 +36,8 @@ function Chat({ socket, username, room }) {
       setCurrentMessage(""); // Clear the input field
       setSelectedFile(null); // Reset selected file after sending
     }
+    }
+    
   };
 
   useEffect(() => {
@@ -96,12 +99,11 @@ const receiveMessage = (data) => {
       fileInput.click();
    };
 
-//   // Function to handle file upload
+  // Function to handle file upload
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
       setFileUploaded(true);
-      handleFileUpload(); 
-      event.target.remove(); 
+    
   };
 
   const handleFileUpload = async () => {
