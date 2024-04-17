@@ -120,7 +120,10 @@ const receiveMessage = (data) => {
           author: username,
           fileData,
           fileName: selectedFile.name,
-          time: new Date().toLocaleTimeString(),
+          time:
+            new Date(Date.now()).getHours() +
+            ":" +
+            new Date(Date.now()).getMinutes(),
         };
         setMessageList((list) => [...list, messageData]);
         setSelectedFile(null); 
