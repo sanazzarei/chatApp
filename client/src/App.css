@@ -27,13 +27,20 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  flex-direction: column;
 }
 
 .input-container {
   width: 100%;
   max-width: 300px;
   margin: 0 10px;
-  text-align: left;
+}
+.input-container p {
+  color: #00000095;
+  cursor: pointer;
+}
+.input-container p:hover {
+  color: #000000da;
 }
 
 input[type="text"] {
